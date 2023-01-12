@@ -1,6 +1,6 @@
 # idSV
 
-[Esta documentación tambien está disponible en español.](https://github.com/avalontechsv/idSV/blob/master/README.es.md)
+[Esta documentación tambien está disponible en español.](https://github.com/avalon-tech/idSV/blob/main/README.es.md)
 
 ## Introduction
 idSV is a tool for validation of common identity numbers in El Salvador, such as DUI and NIT.
