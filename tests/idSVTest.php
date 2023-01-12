@@ -114,4 +114,14 @@ class idSVTest extends TestCase {
                 $validator = new idSV();
                 $this->assertFalse($validator->isValidNIT('00000000000000000'));
         }
+
+        public function testValidatorReturnsFalseForNullDUI() {
+                $validator = new idSV();
+                $this->assertFalse($validator->isValidDUI(null));
+        }
+
+        public function testValidatorReturnsFalseForNullNIT() {
+                $validator = new idSV();
+                $this->assertFalse($validator->isValidNIT(null));
+        }
 }

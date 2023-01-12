@@ -36,3 +36,7 @@ echo '$validator->isValidNIT(\'00000000-1\') -> '; var_dump($validator->isValidN
 // The library will automatically trim the input.
 // This is useful when you are validating user input.
 echo '$validator->isValidNIT(\' 0000000000000 \') -> '; var_dump($validator->isValidNIT(' 0000000000000 ')); // true
+
+// DUI and NIT can also be null
+echo '$validator->isValidDUI(null) -> '; var_dump($validator->isValidDUI(null)); // false
+echo '$validator->isValidNIT(null) -> '; var_dump($validator->isValidNIT(null)); // false

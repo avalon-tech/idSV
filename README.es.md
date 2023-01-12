@@ -53,6 +53,10 @@ $validator->isValidNIT('00000000-1'); // false
 // La biblioteca eliminará automáticamente los espacios en blanco.
 // Esto es útil cuando está validando entradas de un usuario.
 $validator->isValidNIT(' 0000000000000 '); // true
+
+// DUI y NIT también pueden ser nulos
+$validator->isValidDUI(null); // false
+$validator->isValidNIT(null); // false
 ```
 ## Pruebas
 Puedes ejecutar las pruebas con PHPUnit:

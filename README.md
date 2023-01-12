@@ -53,6 +53,11 @@ $validator->isValidNIT('00000000-1'); // false
 // The library will automatically trim the input.
 // This is useful when you are validating user input.
 $validator->isValidNIT(' 0000000000000 '); // true
+
+// DUI and NIT can also be null
+$validator->isValidDUI(null); // false
+$validator->isValidNIT(null); // false
+```
 ```
 ## Testing
 You can run the tests with PHPUnit:

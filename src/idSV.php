@@ -9,8 +9,13 @@ class idSV{
      * @param string $dui
      * @return bool
      */
-    public function isValidDUI(string $dui): bool
+    public function isValidDUI(?string $dui): bool
     {
+        // DUI cannot be null
+        if (is_null($dui)) {
+            return false;
+        }
+
         // DUI cannot be empty
         if (empty($dui)) {
             return false;
@@ -67,12 +72,17 @@ class idSV{
      * @param string $nit
      * @return bool
      */
-    public function isValidNIT(string $nit): bool
+    public function isValidNIT(?string $nit): bool
     {
         // Since December 17th, 2021, DUIs are valid NITs, so isValidDUI() can be used
         // if $nit is a DUI
         if ($this->isValidDUI($nit)) {
             return true;
+        }
+
+        // NIT cannot be null
+        if (is_null($nit)) {
+            return false;
         }
 
         // NIT cannot be empty
