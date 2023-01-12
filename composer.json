@@ -2,7 +2,7 @@
     "name": "avalontechsv/idsv",
     "description": "Validate common identity numbers in El Salvador",
     "type": "library",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-or-later",
     "require": {
         "php": ">=7.2"
     },
