@@ -1,0 +1,28 @@
+{
+    "name": "avalontechsv/idsv",
+    "description": "Validate common identity numbers in El Salvador",
+    "type": "library",
+    "license": "GPL-3.0",
+    "require": {
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "avalontechsv\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "avalontechsv\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rodrigo Arévalo",
+            "email": "rodrigo.arevalo@avalontechsv.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
