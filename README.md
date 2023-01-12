@@ -61,6 +61,12 @@ You can run the tests with PHPUnit:
 ./vendor/bin/phpunit
 ```
 
+Or you can run the `test` script with composer:
+
+```bash
+composer test
+```
+
 ## Acknowledgements
 - [gmelendezcr](https://github.com/gmelendezcr) for the algorithm and [gist](https://gist.github.com/gmelendezcr/3609421) to calculate the check digit in DUIs. Written in Javascript.
 - [MauricioG](https://www.svcommunity.org/forum/programacioacuten/como-calcular-digito-verificador-del-dui-y-nit/45/) for the algorithm to calculate the check digit in NITs. Written in Visual FoxPro.

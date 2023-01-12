@@ -61,6 +61,12 @@ Puedes ejecutar las pruebas con PHPUnit:
 ./vendor/bin/phpunit
 ```
 
+O puedes usar el comando `test` de composer:
+
+```bash
+composer test
+```
+
 ## Agradecimientos
 - [gmelendezcr](https://github.com/gmelendezcr) por el algoritmo y el [gist](https://gist.github.com/gmelendezcr/3609421) para calcular el dígito validador en los DUI. Escrito en Javascript.
 - [MauricioG](https://www.svcommunity.org/forum/programacioacuten/como-calcular-digito-verificador-del-dui-y-nit/45/) por el algoritmo para calcular el dígito validador en los NIT. Escrito en Visual FoxPro.
