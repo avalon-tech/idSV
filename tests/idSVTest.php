@@ -1,8 +1,11 @@
 <?php
 
-namespace avalontechsv;
+namespace avalontechsv\idSV\Tests;
 
 use PHPUnit\Framework\TestCase;
+use avalontechsv\idSV\idSV;
+use avalontechsv\idSV\Exceptions\InvalidDUIException;
+use avalontechsv\idSV\Exceptions\InvalidNITException;
 
 class idSVTest extends TestCase {
         public function testInstantiationOfidSV() {
@@ -55,9 +58,14 @@ class idSVTest extends TestCase {
                 $this->assertFalse($validator->isValidDUI('0000000000'));
         }
 
-        public function testValidatorReturnsFalseForDUIWithLessThan9Characters() {
+        public function testValidatorReturnsTrueForTrimmedValidDUI() {
                 $validator = new idSV();
-                $this->assertFalse($validator->isValidDUI('00000000'));
+                $this->assertTrue($validator->isValidDUI('00'));
+        }
+
+        public function testValidatorReturnsFalseForTrimmedInvalidDUI() {
+                $validator = new idSV();
+                $this->assertFalse($validator->isValidDUI('01'));
         }
 
         public function testValidatorReturnsTrueForValidNITWithDash() {
@@ -115,6 +123,16 @@ class idSVTest extends TestCase {
                 $this->assertFalse($validator->isValidNIT('00000000000000000'));
         }
 
+        public function testValidatorReturnsTrueForDUIinNITValidation() {
+                $validator = new idSV();
+                $this->assertTrue($validator->isValidNit('00000000-0'));
+        }
+
+        public function testValidatorReturnsFalseForDUIinNITValidationIfDUIsAreNotAllowed() {
+                $validator = new idSV();
+                $this->assertTrue($validator->isValidNit('00000000-0', true));
+        }
+
         public function testValidatorReturnsFalseForNullDUI() {
                 $validator = new idSV();
                 $this->assertFalse($validator->isValidDUI(null));
@@ -123,5 +141,53 @@ class idSVTest extends TestCase {
         public function testValidatorReturnsFalseForNullNIT() {
                 $validator = new idSV();
                 $this->assertFalse($validator->isValidNIT(null));
+        }
+
+        public function testFormatterReturnsFormattedDUI() {
+                $validator = new idSV();
+                $this->assertEquals('00000000-0', $validator->formatDUI('000000000'));
+        }
+
+        public function testFormatterReturnsFormattedNIT() {
+                $validator = new idSV();
+                $this->assertEquals('0000-000000-000-0', $validator->formatNIT('00000000000000'));
+        }
+
+        public function testFormatterReturnsFormattedNITinDUIFormat() {
+                $validator = new idSV();
+                $this->assertEquals('00000000-0', $validator->formatNIT('000000000'));
+        }
+
+        public function testFormatterReturnsFormattedNITinNITFormatWhenAsked() {
+                $validator = new idSV();
+                $this->assertEquals('0000-000000-000-0', $validator->formatNIT('000000000', false));
+        }
+
+        public function testFormatterThrowsExceptionForInvalidDUI() {
+                $validator = new idSV();
+                $this->expectException(InvalidDUIException::class);
+                $validator->formatDUI('000000001');
+        }
+
+        public function testFormatterThrowsExceptionForInvalidNIT() {
+                $validator = new idSV();
+                $this->expectException(InvalidNITException::class);
+                $validator->formatNIT('00000000000001');
+        }
+
+        public function testFormatterThrowsExceptionForInvalidNITinDUIFormat() {
+                $validator = new idSV();
+                $this->expectException(InvalidNITException::class);
+                $validator->formatNIT('000000001');
+        }
+
+        public function testFormatterReturnsFormattedDUIIfShorterStringProvided(){
+                $validator = new idSV();
+                $this->assertEquals('00000000-0', $validator->formatDUI('00'));
+        }
+
+        public function testFormatterReturnsFormattedNITIfShorterStringProvided(){
+                $validator = new idSV();
+                $this->assertEquals('0000-000000-000-0', $validator->formatNIT('00', false));
         }
 }

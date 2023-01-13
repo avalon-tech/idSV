@@ -1,8 +1,27 @@
 <?php
 
-namespace avalontechsv;
+namespace avalontechsv\idSV;
+use avalontechsv\idSV\Exceptions\InvalidDUIException;
+use avalontechsv\idSV\Exceptions\InvalidNITException;
 
-class idSV{
+class idSV {
+    /**
+     * Clean a document string
+     *
+     * @param string $document
+     * @return string
+     */
+    private function cleanDocument(string $document): string
+    {
+        // Trim to remove spaces at the beginning and end of the string
+        $document = trim($document);
+
+        // Remove dash from document
+        $document = str_replace('-', '', $document);
+
+        return $document;
+    }
+
     /**
      * Check if a DUI is valid
      *
@@ -21,21 +40,15 @@ class idSV{
             return false;
         }
 
-        // Trim to remove spaces at the beginning and end of the string
-        $dui = trim($dui);
-
-        // DUI can be 9 or 10 characters long, depending if it has a dash
-        if (strlen($dui) != 9 && strlen($dui) != 10) {
-            return false;
-        }
-
-        // Remove dash from DUI
-        $dui = str_replace('-', '', $dui);
+        $dui = $this->cleanDocument($dui);
 
         // DUI must be numeric
         if (!is_numeric($dui)) {
             return false;
         }
+
+        // Pad DUI with zeros to the left, if it's less than 9 characters long
+        $dui = str_pad($dui, 9, '0', STR_PAD_LEFT);
 
         // DUI must be 9 characters long
         if (strlen($dui) != 9) {
@@ -67,16 +80,18 @@ class idSV{
     }
 
     /**
-     * Check if a NIT is valid
+     * Check if a NIT is valid. You may disable the validation of DUIs in this function passing false as a second argument.
      *
      * @param string $nit
+     * @param bool $allowDUI = true
      * @return bool
      */
-    public function isValidNIT(?string $nit): bool
+    public function isValidNIT(?string $nit, bool $allowDUI = true): bool
     {
         // Since December 17th, 2021, DUIs are valid NITs, so isValidDUI() can be used
-        // if $nit is a DUI
-        if ($this->isValidDUI($nit)) {
+        // if $nit is a DUI. If you want to make a strict NIT validation without taking
+        // DUIs as valid, pass false to $allowDUI.
+        if ($this->isValidDUI($nit) && $allowDUI) {
             return true;
         }
 
@@ -90,30 +105,17 @@ class idSV{
             return false;
         }
 
-        // Trim to remove spaces at the beginning and end of the string
-        $nit = trim($nit);
-
-        // NIT can be 17 characters long, if it has dashes
-        // NIT can be 14 characters long, if it doesn't have dashes
-        // NIT can be 13 characters long, if it doesn't have dashes and the first digit is 0
-        if (strlen($nit) != 13 && strlen($nit) != 14 && strlen($nit) != 17) {
-            return false;
-        }
-
-        // Remove dashes from NIT
-        $nit = str_replace('-', '', $nit);
+        $nit = $this->cleanDocument($nit);
 
         // NIT must be numeric
         if (!is_numeric($nit)) {
             return false;
         }
 
-        // If NIT is 13 characters long, add a 0 at the beginning
-        if (strlen($nit) == 13) {
-            $nit = '0' . $nit;
-        }
+        // Pad NIT with zeros to the left, if it's less than 14 characters long
+        $nit = str_pad($nit, 14, '0', STR_PAD_LEFT);
 
-        // NIT must be 14 characters long now
+        // NIT must be 14 characters long
         if (strlen($nit) != 14) {
             return false;
         }
@@ -146,5 +148,68 @@ class idSV{
         }
 
         return $calculatedCheckDigit == intval(substr($nit, 13, 1));
+    }
+
+    /**
+     * Format a DUI
+     *
+     * @param string $unformatted
+     * @return string
+     * @throws InvalidDUIException
+     */
+    public function formatDUI(?string $unformatted)
+    {
+        $unformatted = $this->cleanDocument($unformatted);
+
+        // Pad DUI with zeros to the left, if it's less than 9 characters long
+        $unformatted = str_pad($unformatted, 9, '0', STR_PAD_LEFT);
+
+        $validated = $this->isValidDUI($unformatted);
+
+        if(!$validated){
+            throw new InvalidDUIException();
+        }
+
+        $formatted = substr($unformatted, 0, 8) . '-' . substr($unformatted, 8, 1);
+
+        return $formatted;
+    }
+
+    /**
+     * Format a NIT. You may disable DUI formatting in this function passing false as a second argument.
+     *
+     * @param string $unformatted
+     * @param bool $allowDUI = true
+     * @return string
+     * @throws InvalidNITException
+     * @throws InvalidDUIException
+     */
+    public function formatNIT(?string $unformatted, bool $allowDUI = true)
+    {
+        if($allowDUI){
+            $unformatted = $this->cleanDocument($unformatted);
+
+            // If $unformatted is less than 8 characters long, it could be a DUI, pad it first
+            $unformatted = str_pad($unformatted, 9, '0', STR_PAD_LEFT);
+
+            $is_dui = $this->isValidDUI($unformatted);
+
+            if($is_dui){
+                return $this->formatDUI($unformatted);
+            }
+        }
+
+        // Pad NIT with zeros to the left, if it's less than 14 characters long
+        $unformatted = str_pad($unformatted, 14, '0', STR_PAD_LEFT);
+
+        $validated = $this->isValidNIT($unformatted, false);
+
+        if(!$validated){
+            throw new InvalidNITException();
+        }
+
+        $formatted = substr($unformatted, 0, 4) . '-' . substr($unformatted, 4, 6) . '-' . substr($unformatted, 10, 3) . '-' . substr($unformatted, 13, 1);
+
+        return $formatted;
     }
 }

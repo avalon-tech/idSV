@@ -1,6 +1,6 @@
 {
     "name": "avalontechsv/idsv",
-    "description": "Validate common identity numbers in El Salvador",
+    "description": "Validate and format common identity numbers in El Salvador",
     "type": "library",
     "license": "GPL-3.0-or-later",
     "require": {
@@ -8,12 +8,13 @@
     },
     "autoload": {
         "psr-4": {
-            "avalontechsv\\": "src/"
+            "avalontechsv\\idSV\\": "src/",
+            "avalontechsv\\idSV\\Exceptions\\": "src/Exceptions/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "avalontechsv\\Tests\\": "tests/"
+            "avalontechsv\\idSV\\Tests\\": "tests/"
         }
     },
     "authors": [

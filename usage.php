@@ -1,27 +1,8 @@
-# idSV
+<?php
 
-[Esta documentación tambien está disponible en español.](https://github.com/avalon-tech/idSV/blob/main/README.es.md)
-
-## Introduction
-idSV is a tool for validation of common identity numbers in El Salvador, such as DUI and NIT.
-
-## Important notice
-Since December 17th, 2021, DUIs are valid NITs for natural persons, so any DUI is a valid NIT. This means that you can use the same number for both validations in the context of a natural person (i.e. a person with a DUI).
-
-Legal entities are not affected by this change, so you should still use the NIT validation for them.
-
-There is also an option to override this functionality in the library when required.
-
-## Installation
-You can use composer to install idSV in your project:
-
-```bash
-composer require avalontechsv/idSV
-```
-
-## Usage
-```php
 use avalontechsv\idSV\idSV;
+
+require_once 'vendor/autoload.php';
 
 $validator = new idSV();
 
@@ -94,24 +75,3 @@ var_dump($validator->formatNIT('00', false)); // 0000-000000-000-0
 
 // Invalid NITs generate an exception
 try { $validator->formatNIT('0000000000001'); } catch (\Exception $e) { echo 'Exception: ' . $e->getMessage() . '\n';  } // Exception: Invalid NIT
-```
-```
-## Testing
-You can run the tests with PHPUnit:
-
-```bash
-./vendor/bin/phpunit
-```
-
-Or you can run the `test` script with composer:
-
-```bash
-composer test
-```
-
-## Acknowledgements
-- [gmelendezcr](https://github.com/gmelendezcr) for the algorithm and [gist](https://gist.github.com/gmelendezcr/3609421) to calculate the check digit in DUIs. Written in Javascript.
-- [MauricioG](https://www.svcommunity.org/forum/programacioacuten/como-calcular-digito-verificador-del-dui-y-nit/45/) for the algorithm to calculate the check digit in NITs. Written in Visual FoxPro.
-
-## License
-This package is open-sourced software licensed under the [GNU General Public License v3.0](https://opensource.org/licenses/GPL-3.0).
